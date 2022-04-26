@@ -81,7 +81,7 @@ def updateList(list,letter, pos):
 def updateList2(list,letter,pos):
     newlist =[]
     for i in list:
-        if letter in i[pos]:
+        if letter == i[pos]:
             newlist.append(i)
     return newlist
 
@@ -93,6 +93,28 @@ def updateList3(list,letter):
     return newlist
 
 def updatePossibleWords(hints,currentlist,word):
+    doubles = []
+    single =[]
+    for i in word:
+        if i in single and i not in doubles:
+            doubles.append(i)
+        single.append(i)
+
+    dict = {}
+    for i in doubles:
+        for j in range(len(word)):
+            if(i == word[j]):
+                if(hints[j]=='correct'):
+                    dict[i]= 'correct'
+
+    for i in doubles:
+        if i in dict:
+            for j in range(len(word)):
+                if(i == word[j]):
+                    if(hints[j]=='absent'):
+                        hints[j] ='present'
+    
+
     for index,i in enumerate(hints):
         if i == 'present':
             currentlist=updateList(currentlist,word[index],index) 
@@ -170,6 +192,10 @@ def play():
         possiblewords= updatePossibleWords(hints,possiblewords,guess)
         print(possiblewords)
         time.sleep(4)
+        if(guess == 'means'):
+            restart()
+
+
 def main():
     startgame()
     for j in range(15):
